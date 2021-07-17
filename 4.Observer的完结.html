@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //observable通过next函数来告诉observer现在推送的数据,而没办法告诉observer数据的完结(没有更多数据了).
+        //complate 函数就是用于告诉observer 没有更多数据了.
+        const source$ = new Rx.Observable(observer =>{
+            let i = 0;
+            
+            const timer = setInterval(()=>{
+                observer.next(++i);
+                //直推送3次
+                if(i >= 3){
+                    clearInterval(timer);
+                    //告诉observer没有数据了
+                    observer.complete();
+                }
+            },1000);
+        });
+        const theObserver = {
+            next : item => console.log(item),
+            complete : () => console.log('没有更多数据了')
+        };
+        source$.subscribe(theObserver);
+    </script>
+</body>
+</html>

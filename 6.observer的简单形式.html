@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+      const source$ = new Rx.Observable((observer) => {
+        observer.next(1);
+        observer.error("error");
+        observer.complete();
+      });
+      //observer提供3个方法next, complete , error 对应了Observable的3种状态.
+      //observer可以是一个对象, 为了简化observer,在subscribe的时候也可传入3个函数分别代表next error complete.
+      /** 对象形态的observer **/
+      const theObserver = {
+        next : item => console.log(item),
+        complete : ()=> console.log('没有更多数据了'),
+        error : () => console.log('发生错误了')
+      }
+    /** 函数形态的observer **/
+      source$.subscribe(
+        (item) => console.log(item),//next
+        null, // error, 当Observable比较简单时,或者不关心error时, 可以不用传入error
+        () => console.log("没有更多数据了") //complete
+      );
+    </script>
+  </body>
+</html>

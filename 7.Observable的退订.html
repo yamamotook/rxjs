@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        
+        //无穷无尽的Observable
+        const source$ = new Rx.Observable( observer =>{
+            let count = 0;
+            setInterval(()=>{
+                console.log('in Observable')
+                observer.next(++count);
+            },1000);
+            return {
+                //退订的回调函数,rxjs会在退订之后调用这个函数
+                //该函数可以用于进行一些后续处理
+                unsubscribe : ()=>{ console.log('调用了unsubscribe') }
+            }
+        });
+        //在subscribe之后会返回一个对象, 这个对象里面提供了一个unsubscribe方法,用于断开Observable和observer之间的连接.
+        const unSubscribe = source$.subscribe(console.log);
+        setTimeout(()=>{
+            unSubscribe.unsubscribe();
+        }, 3500)
+
+
+    </script>
+</body>
+</html>

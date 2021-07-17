@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        const source$ = new Rx.Observable(observer=>{
+            let count = 0;
+            //从Observable中吐出无穷无尽的数据.
+            setInterval(()=>{
+                observer.next(++count)
+            }, 1000);
+
+        })
+        const theObserver = {
+            next : item => console.log(item)
+        };
+        source$.subscribe(theObserver);
+    </script>
+</body>
+</html>

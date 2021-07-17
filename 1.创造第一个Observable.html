@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //产生一个Observable
+        const source$ = new Rx.Observable( observer => {
+            //该函数会决定如何产生数据, 也就是publisher
+            //将产生的数据推送给Observer
+            observer.next(1);
+            observer.next(2);
+            observer.next(3);
+        });
+        //观察者Observer
+        const theObserver = {
+            next : item => console.log(item)
+        }
+        //将Observable和Observer连接起来
+        source$.subscribe(theObserver);
+    </script>
+</body>
+</html>

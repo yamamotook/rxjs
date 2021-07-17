@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //理想情况下Observable产生数据给Observer消耗, 有时候Observable难免会发生错误而无法继续推送数据给observer了.
+        //可以通过error告诉observer出错了.
+        const source$ = new Rx.Observable(subsribe => {
+            subsribe.next(1);
+            subsribe.error('error');
+            subsribe.complete();
+        });
+        const theObserver = {
+            next : item => console.log(item),
+            complete : ()=> console.log('没有更多数据了'),
+            error : () => console.log('发生错误了')
+        }
+        source$.subscribe(theObserver);
+    </script>
+</body>
+</html>

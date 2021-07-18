@@ -250,7 +250,11 @@ source$.pipe(  filter(i => i % 2 === 0), map(i => i*2) ).subscribe(console.log)
 由于操作符要从 Observable 中独立出来，所以操作符的名称不能和 JavaScript 的关键字冲突。因此一些操作符的 pipeable 版本的名称做出了修改。这些操作符是:
 
 do -> tap
+
 catch -> catchError
+
 switch -> switchAll
+
 finally -> finalize
+
 

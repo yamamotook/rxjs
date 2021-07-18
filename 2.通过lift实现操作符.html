@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //lift是Rxjs 5之后提供的一个实例方法.
+        
+
+        //Rx.Observable.of(1,2,3,4).myFilter(i => i % 2 === 0).subscribe(console.log)
+        function myFilter(project){
+            //lift(意为提升), 会返回一个Observable对象
+            return this.lift(function (source$){
+                //当lift返回的observable被订阅时,会执行传入lift的方法;
+                //传入lift的方法中, this代表observer, source$代表上游的observable
+                return source$.subscribe(item => {
+                    try{
+                        if(project(item)){
+                            this.next(item);
+                        }
+                    }catch(err){
+                        this.error(err)
+                    }
+                },
+                err => this.error(err),
+                () => this.complete()
+                )                
+            });
+        }
+
+        Rx.Observable.prototype.myFilter = myFilter;
+        Rx.Observable.of(1,2,3,4,5,6).myFilter(i => i % 2 === 0).subscribe(console.log)
+        
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "rxjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:yamamotook/rxjs.git",
+  "author": "yamamoto <qq931266421@outlook.com>",
+  "license": "MIT",
+  "dependencies": {
+    "rxjs": "5.5.2"
+  }
+}

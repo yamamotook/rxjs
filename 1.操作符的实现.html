@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //YY的调用方式 : Rx.Observable.of(1,2,3).myMap(i => i * 2).subscribe(console.log)
+        function myMap(project){
+            //返回一个全新的Observable
+            return new Rx.Observable(observer => {
+                //订阅上游的observable
+                //因为是链式调用,所以这里的this,肯定是上游的Observable
+                const subscription = this.subscribe(item=>{
+                    //处理异常情况
+                    //对于异常情况应该告知交由observer来处理
+                    try{
+                        observer.next(project(item))
+                    }catch(e){
+                        observer.error(e);
+                    }
+                },
+                err => observer.error(err),
+                () => observer.complete()
+                );
+                //当下游的observable退订当前observable时, 需要去退订上游的observable
+                return {
+                    unsubscribe : ()=>{
+                        subscription.unsubscribe();
+                    }
+                }
+            });
+        }
+        
+        //关联我的操作符
+        Rx.Observable.prototype.myMap = myMap;
+
+        //try 一下        
+        //官方的map
+        console.log('官方的Map');
+        Rx.Observable.of(1,2,3,4).map( i => i * 2).subscribe(console.log);
+        //mapMap
+        console.log('我的Map');
+        Rx.Observable.of(1,2,3,4).myMap(i => i * 2).subscribe(console.log)
+
+        console.log('通过bind使用操作符')
+        //也可以这样关联
+        myMap.bind(Rx.Observable.of(1,2,3,4))(i => i * 2).subscribe(console.log)
+        
+
+        
+
+    </script>
+</body>
+</html>

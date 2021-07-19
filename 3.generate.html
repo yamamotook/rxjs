@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //产生10以内为偶数的平方。
+        Rx.Observable.generate(
+            0, 
+            value => value <= 10, 
+            value => value + 2, 
+            value => value * value
+        ).subscribe(console.log);
+
+        //利用generate实现range的功能
+        const range = (start ,count) => {
+            const max = start + count;
+            return Rx.Observable.generate(
+                start,
+                v => v < max,
+                v => v + 1,
+                v => v
+            )
+        }
+        range(1,100).subscribe(console.log)
+    </script>
+</body>
+</html>

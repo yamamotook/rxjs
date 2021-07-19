@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //使用create操作符创建3个正整数集合。
+        Rx.Observable.create(observer => {
+            observer.next(1);
+            observer.next(2);
+            observer.next(3);
+            observer.complete();
+        }).subscribe(
+            console.log,
+            null,
+            ()=>{console.log('complete')}
+        )
+        //使用of 
+        Rx.Observable.of(1,2,3).subscribe(console.log, null, ()=>{console.log('complete')});
+    </script>
+</body>
+</html>

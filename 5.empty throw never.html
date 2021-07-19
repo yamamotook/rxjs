@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //empty 产生一个Observable什么都不做，然后立刻完结
+        Rx.Observable.empty().subscribe(
+            console.log, 
+            null, 
+            ()=> console.log('empty complete')
+        )
+
+        //throw 产生一个Observable什么都不做，然后抛出一个错误
+        Rx.Observable.throw().subscribe(
+            console.log, 
+            ()=> console.log('throw error'), 
+            ()=> console.log('throw complete')
+        )
+        //newver 产生一个Observable 什么都不做， 永远也不会完结。
+        Rx.Observable.never().subscribe(
+            console.log, 
+            ()=> console.log('never error'), 
+            ()=> console.log('never complete')
+        )
+    </script>
+</body>
+</html>

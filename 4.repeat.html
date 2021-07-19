@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //重复1，2，3 序列10次
+        // Rx.Observable.of(1,2,3).repeat(10).subscribe(console.log);
+        //repeat的细节
+        //每隔1秒生成一个数字， 直到第4秒上游Observable完结。
+        // Rx.Observable.create(observer=>{
+        //     console.log('Observable 被 observer subscribe了！')
+        //     setTimeout(() => observer.next(1), 1000)
+        //     setTimeout(() => observer.next(2), 2000)
+        //     setTimeout(() => observer.next(3), 3000)
+        //     setTimeout(() => observer.complete(), 4000);
+        //     return {
+        //         unsubscribe : ()=>{ console.log('退订了Observable') }
+        //     }
+        // }).repeat(2).subscribe(console.log, null , ()=> console.log('repeat complete'));
+
+        //如果上游的Observable不及时完结。
+        Rx.Observable.create( observer => {
+            console.log('Observable 被 observer subscribe了！')
+            setTimeout(() => observer.next(1), 1000)
+            setTimeout(() => observer.next(2), 2000)
+            setTimeout(() => observer.next(3), 3000) 
+            return {
+                unsubscribe : ()=>{ console.log('退订了Observable') }
+            }
+        }).repeat(2).subscribe(console.log, null , ()=> console.log('repeat complete'));
+
+    </script>
+</body>
+</html>

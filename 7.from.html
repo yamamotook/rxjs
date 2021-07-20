@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+      //将数组转换为Observable对象
+      Rx.Observable.from([1, 2, 3]);
+      //不仅是支持， 类数组也可以
+      Rx.Observable.from({
+        0: 1,
+        1: 2,
+        2: 3,
+        length: 3,
+      })
+      //将generator转换为Observable
+      function * getNumber(max){
+          for(let i = 0; i < max; i++){
+              yield i;
+          }
+      }
+      Rx.Observable.from(getNumber(3))
+      
+      Rx.Observable.from(new Promise((resolve, reject)=>{
+          setTimeout(()=>{
+              resolve(100)
+          },3000)
+      }))
+
+      Rx.Observable.from(Promise.reject('errrr')).subscribe(null, (err) => console.log(err))
+    </script>
+  </body>
+</html>

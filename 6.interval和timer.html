@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //每隔1.5s吐出从0递增的整数序列
+        // Rx.Observable.interval(1500).subscribe(console.log)
+        //2s之后吐出0然后完结。
+        // Rx.Observable.timer(2000).subscribe(console.log, null, ()=> console.log('complete'))
+        // Rx.Observable.timer(new Date(Date.now() + 1000)).subscribe(console.log, null, ()=> console.log('complete'))
+        //效果等同于interval(1000)
+        Rx.Observable.timer(1000, 1000).subscribe(console.log, null, ()=> console.log('complete'))
+    </script>
+</body>
+</html>

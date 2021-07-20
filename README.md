@@ -211,3 +211,12 @@ Rx.Observable.never().subscribe(
 输出结果:啥也没有！
 ![图 6](images/d86a5d877bc94f318526f560146f65d3a0e3c22c641cbfa833441804ac3e10c4.png)  
 
+
+## 产生异步的数据流
+
+### interval 和 timer 定时持续的产生数据流
+
+interval 和 timer 对应了js中的 `setInterval` 和  `setTimeout`
+
+#### interval
+

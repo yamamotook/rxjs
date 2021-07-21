@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>
+      <button id="btn">点击获得Start</button>
+      Rxjs在github上的start : <span id="start"></span>
+    </h1>
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+      Rx.Observable.fromEvent(document.querySelector("#btn"), "click").subscribe(() => {
+        //将ajax请求转换为Observable
+        Rx.Observable.ajax("https://api.github.com/repos/ReactiveX/rxjs", {
+          responseType: "json",
+        })
+          .map((resp) => resp.response)
+          .subscribe((value) => {
+            document.querySelector("#start").innerText = value.stargazers_count;
+          });
+      });
+
+      
+    </script>
+
+  </body>
+</html>

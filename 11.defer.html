@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+      const observableFactory = () => {
+          console.log('ffff');
+          return Rx.Observable.of(1, 2, 3)
+      };
+      //当source$被订阅时才会产生
+      const source$ = Rx.Observable.defer(observableFactory);
+      
+    </script>
+  </body>
+</html>

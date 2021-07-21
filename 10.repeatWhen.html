@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <script src="https://unpkg.com/rxjs@5.5.2/bundles/Rx.min.js"></script>
+    <script>
+        //repeatWhen 当上游完结之后, 可以控制什么时候再去重新订阅上游,而不像repeat是立刻重新订阅上游
+        //repeatWhen接受一个函数, 这个函数需要返回一个Observable, 这个Observable用于控制什么时候重新订阅上游.当这个Observable吐出第一个数据时,就会重新订阅上游.
+        //每1秒repeat一次
+        const notifier = ()=> Rx.Observable.interval(1000);
+        Rx.Observable.from([1,2,3]).repeatWhen(notifier);
+
+        //对于同步的Observable可以通过interval或者timer来控制节奏,但是对于异步的Observable来说就不行了.
+        const notifier2 = (notification$)=> notification$.delay(2000)
+    </script>
+</body>
+</html>

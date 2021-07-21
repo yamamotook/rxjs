@@ -320,7 +320,73 @@ Rx.Observable.from(Promise.reject('errrr')).subscribe(
 )
 ```
 
+### fromEvent Rxjs与DOM的桥梁
+
+fromEvent可以将各种DOM事件(还包括了Nodejs事件)转换为Observable.
+```js
+//第一个参数为DOM元素, 第二个参数为事件名称.
+Rx.Observable.fromEvent(document.querySelector('#add'), 'click')
+    .subscribe(
+        (e)=>{
+            console.log('click', e);
+        }
+    )
+```
+fromEvent是一个HotObservable.只有从订阅那一刻开始才会接收到数据.
+
+### ajax 将ajax转换为Observable
+
+```js
+//获取rxjs在github上的start
+Rx.Observable.ajax("https://api.github.com/repos/ReactiveX/rxjs", {
+          responseType: "json",
+})
+    .map((resp) => resp.response)
+    .subscribe((value) => {
+        document.querySelector("#start").innerText = value.stargazers_count;
+    });
+```
+
+### repeatWhen repeat的加强
+
+repeat可以再上游Observable完结之后重新订阅.而无法再完结之后等待一会再重新订阅.repeatWhen则可以.
+```js
+ //repeatWhen 当上游完结之后, 可以控制什么时候再去重新订阅上游,而不像repeat是立刻重新订阅上游
+//repeatWhen接受一个函数, 这个函数需要返回一个Observable, 这个Observable用于控制什么时候重新订阅上游.当这个Observable吐出第一个数据时,就会重新订阅上游.
+//每1秒repeat一次
+const notifier = ()=> Rx.Observable.interval(1000);
+Rx.Observable.from([1,2,3]).repeatWhen(notifier);
+```
+
+对于异步的数据进行repeatWhen时,需要精确直到上游Observable什么时候完结, 所以使用interval就不行了.
+```js
+//上游完结时,notification$就会吐出一个数据, 然后通过delay操作符(延迟)控制repeat的节奏.
+const notifier = (notification$)=> notification$.delay(2000)
+```
+
+notifier的参数实际上⼀种特殊的Observable对象，它既是Observable也
+是Observer，在RxJS中被称为Subject
 
 
+### defer 延迟创建Observable
 
+数据源头的Observable需要占⽤资源，像fromEvent和ajax这样的操作符，还需要外部资源，所以在RxJS中，有时候创建⼀个Observable的代价
+不⼩，所以，我们肯定希望能够尽量延迟对应Observable的创建，但是从⽅便代码的⾓度，我们又希望有⼀个Observable预先存在，这样能够⽅便订阅。
+
+⼀⽅⾯我们希望Observable不要太早创建，另⼀⽅⾯我们又希望Observable尽早创建，这是⼀个⽭盾的需求，解决这个⽭盾需求的⽅式，就是依然创建⼀个Observable。但这个Observable只是⼀个代理（Proxy），在创建之时并不会做分配资源的⼯作，只有当被订阅的时候，才会去创建真正占⽤资源的Observable，之前产⽣的代理Observable会把所有⼯作都转交给真正占⽤资源的Observable。
+
+defer接受⼀个函数作为参数，当defer产⽣的Observable对象被订阅的时候，defer的函数参数就会被调⽤，预期这个函数会返回另⼀个Observable对象，也就是defer转嫁所有⼯作的对象。因为Promise和Observable的关系，defer也很贴⼼地⽀持返回Promise对象的函数参数，当参数函数返回Promise对象的时候，省去了应⽤层开发者使⽤fromPromise转化⼀次的劳动。
+
+```js
+const observableFactory = () => Observable.of(1,2,3);
+//当source$被订阅时才会产生真正的数据流
+cosnt source$ = Rx.Observable.defer(observableFactory);
+```
+
+⽐如，我们希望通过AJAX来获取服务器端的数据，可是并不想在程序启动阶段就把AJAX请求发送出去，就可以利⽤defer产⽣⼀个Observable对象，当这个Observable对象被订阅的时候才发送AJAX请求
+
+```js
+const observableFactory = () => Observable.ajax(ajaxUrl);
+const source$ = Observable.defer(observableFactory);
+```
 
